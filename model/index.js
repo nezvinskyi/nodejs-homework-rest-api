@@ -1,7 +1,9 @@
 const fs = require('fs/promises');
 // const contacts = require('./contacts.json');
 const path = require('path');
+const { nanoid } = require('nanoid');
 require('colors');
+
 const contactsPath = path.join(__dirname, './contacts.json');
 
 const listContacts = async () => {
@@ -16,7 +18,7 @@ const listContacts = async () => {
 const getContactById = async contactId => {
   try {
     const data = await listContacts();
-    const contact = data.find(el => el.id === Number(contactId));
+    const contact = data.find(el => el.id.toString() === contactId.toString());
     if (!contact) {
       throw new Error('Error: ID is incorrect');
     }
@@ -29,7 +31,7 @@ const getContactById = async contactId => {
 const removeContact = async contactId => {
   try {
     const data = await listContacts();
-    const idx = data.findIndex(el => el.id === contactId);
+    const idx = data.findIndex(el => el.id.toString() === contactId.toString());
     if (idx === -1) {
       throw new Error('Error: ID is incorrect');
     }
@@ -42,7 +44,25 @@ const removeContact = async contactId => {
   }
 };
 
-const addContact = async body => {};
+const addContact = async body => {
+  try {
+    const { name, email, phone } = body;
+    const newContact = {
+      id: nanoid(),
+      name,
+      email,
+      phone,
+    };
+    const contacts = await listContacts();
+    const newContacts = [...contacts, newContact];
+    const str = JSON.stringify(newContacts);
+    await fs.writeFile(contactsPath, str);
+
+    return newContact;
+  } catch (error) {
+    console.log(error.message.red);
+  }
+};
 
 const updateContact = async (contactId, body) => {};
 

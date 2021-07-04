@@ -1,6 +1,9 @@
+/* eslint-disable indent */
 const express = require('express');
 const router = express.Router();
-const { listContacts, getContactById, removeContact } = require('../../model');
+const contactSchema = require('../../utils/validate/schemas/contacts');
+
+const { listContacts, getContactById, removeContact, addContact } = require('../../model');
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
@@ -29,13 +32,24 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+router.post('/', async (req, res, next) => {
+  const newContact = req.body;
+  const { error } = contactSchema.validate(newContact);
+  if (error) {
+    res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: error.message,
+    });
+    return;
+  }
+  const response = await addContact(newContact);
+  res.status(201).json(response);
+});
 
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
-  const response = await removeContact(Number(contactId));
+  const response = await removeContact(contactId);
   response
     ? res.status(200).json({
         status: 'success',
