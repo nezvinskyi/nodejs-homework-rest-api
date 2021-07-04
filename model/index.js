@@ -35,6 +35,7 @@ const removeContact = async contactId => {
     if (idx === -1) {
       throw new Error('Error: ID is incorrect');
     }
+
     const newContacts = contacts.filter(contact => contact.id.toString() !== contactId.toString());
     const str = JSON.stringify(newContacts);
     await fs.writeFile(contactsPath, str);
