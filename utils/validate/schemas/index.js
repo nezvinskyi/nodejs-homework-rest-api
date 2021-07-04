@@ -1,3 +1,4 @@
 const addContactSchema = require('./addContact');
+const updateContactSchema = require('./updateContact');
 
-module.exports = { addContactSchema };
+module.exports = { addContactSchema, updateContactSchema };

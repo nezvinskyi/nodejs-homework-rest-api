@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 const express = require('express');
 const router = express.Router();
-const { addContactSchema } = require('../../utils/validate/schemas');
+const { addContactSchema, updateContactSchema } = require('../../utils/validate/schemas');
 
 const {
   listContacts,
@@ -33,7 +33,7 @@ router.get('/:contactId', async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       code: 200,
-      data: contact,
+      data: { result: contact },
     });
   }
 });
@@ -50,7 +50,11 @@ router.post('/', async (req, res, next) => {
     return;
   }
   const response = await addContact(newContact);
-  res.status(201).json(response);
+  res.status(201).json({
+    status: 'success',
+    code: 201,
+    data: { result: response },
+  });
 });
 
 router.delete('/:contactId', async (req, res, next) => {
@@ -72,8 +76,20 @@ router.delete('/:contactId', async (req, res, next) => {
 router.patch('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;
+  const { error } = updateContactSchema.validate(body);
+  if (error) {
+    res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: error.message,
+    });
+  }
   const response = await updateContact(contactId, body);
-  res.json(response);
+  res.status(200).json({
+    status: 'success',
+    code: 200,
+    data: { result: response },
+  });
 });
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const fs = require('fs/promises');
-// const contacts = require('./contacts.json');
 const path = require('path');
 const { nanoid } = require('nanoid');
 require('colors');
@@ -8,8 +7,8 @@ const contactsPath = path.join(__dirname, './contacts.json');
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath);
-    return JSON.parse(data);
+    const contacts = await fs.readFile(contactsPath);
+    return JSON.parse(contacts);
   } catch (error) {
     error.message = 'Error: cannot read contacts file';
   }
@@ -18,9 +17,7 @@ const listContacts = async () => {
 const getContactById = async contactId => {
   try {
     const contacts = await listContacts();
-    const idx = contacts.findIndex(el => el.id.toString() === contactId.toString());
-    console.log('idx>>>>>>>>>>', idx);
-    console.log('contactId :>> ', contactId);
+    const idx = contacts.findIndex(contact => contact.id.toString() === contactId.toString());
 
     if (idx === -1) {
       throw new Error('Error: ID is incorrect');
@@ -34,11 +31,11 @@ const getContactById = async contactId => {
 const removeContact = async contactId => {
   try {
     const contacts = await listContacts();
-    const idx = contacts.findIndex(el => el.id.toString() === contactId.toString());
+    const idx = contacts.findIndex(contact => contact.id.toString() === contactId.toString());
     if (idx === -1) {
       throw new Error('Error: ID is incorrect');
     }
-    const newContacts = contacts.filter(el => el.id.toString() !== contactId.toString());
+    const newContacts = contacts.filter(contact => contact.id.toString() !== contactId.toString());
     const str = JSON.stringify(newContacts);
     await fs.writeFile(contactsPath, str);
     return true;
@@ -74,9 +71,11 @@ const updateContact = async (contactId, body) => {
     if (idx === -1) {
       throw new Error('Error: ID is incorrect');
     }
+
     for (const key in body) {
       contacts[idx][key] = body[key];
     }
+
     await fs.writeFile(contactsPath, JSON.stringify(contacts));
     return contacts[idx];
   } catch (error) {
