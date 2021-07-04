@@ -1,9 +1,15 @@
 /* eslint-disable indent */
 const express = require('express');
 const router = express.Router();
-const contactSchema = require('../../utils/validate/schemas/contacts');
+const { addContactSchema } = require('../../utils/validate/schemas');
 
-const { listContacts, getContactById, removeContact, addContact } = require('../../model');
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require('../../model');
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
@@ -34,7 +40,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const newContact = req.body;
-  const { error } = contactSchema.validate(newContact);
+  const { error } = addContactSchema.validate(newContact);
   if (error) {
     res.status(400).json({
       status: 'error',
@@ -63,8 +69,11 @@ router.delete('/:contactId', async (req, res, next) => {
       });
 });
 
-// router.patch('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+router.patch('/:contactId', async (req, res, next) => {
+  const { contactId } = req.params;
+  const body = req.body;
+  const response = await updateContact(contactId, body);
+  res.json(response);
+});
 
 module.exports = router;

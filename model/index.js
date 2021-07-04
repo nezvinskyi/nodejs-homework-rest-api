@@ -17,12 +17,15 @@ const listContacts = async () => {
 
 const getContactById = async contactId => {
   try {
-    const data = await listContacts();
-    const contact = data.find(el => el.id.toString() === contactId.toString());
-    if (!contact) {
+    const contacts = await listContacts();
+    const idx = contacts.findIndex(el => el.id.toString() === contactId.toString());
+    console.log('idx>>>>>>>>>>', idx);
+    console.log('contactId :>> ', contactId);
+
+    if (idx === -1) {
       throw new Error('Error: ID is incorrect');
     }
-    return contact;
+    return contacts[idx];
   } catch (error) {
     console.log(error.message.red);
   }
@@ -30,12 +33,12 @@ const getContactById = async contactId => {
 
 const removeContact = async contactId => {
   try {
-    const data = await listContacts();
-    const idx = data.findIndex(el => el.id.toString() === contactId.toString());
+    const contacts = await listContacts();
+    const idx = contacts.findIndex(el => el.id.toString() === contactId.toString());
     if (idx === -1) {
       throw new Error('Error: ID is incorrect');
     }
-    const newContacts = data.filter(el => el.id !== contactId);
+    const newContacts = contacts.filter(el => el.id.toString() !== contactId.toString());
     const str = JSON.stringify(newContacts);
     await fs.writeFile(contactsPath, str);
     return true;
@@ -64,7 +67,22 @@ const addContact = async body => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const idx = contacts.findIndex(contact => contact.id.toString() === contactId.toString());
+    if (idx === -1) {
+      throw new Error('Error: ID is incorrect');
+    }
+    for (const key in body) {
+      contacts[idx][key] = body[key];
+    }
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return contacts[idx];
+  } catch (error) {
+    console.log(error.message.red);
+  }
+};
 
 module.exports = {
   listContacts,
