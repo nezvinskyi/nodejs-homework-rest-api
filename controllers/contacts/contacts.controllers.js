@@ -1,5 +1,6 @@
 const Contact = require('../../model/contact.model');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
+const { addContactSchema, updateContactSchema } = require('../../utils/validate/schemas');
 
 const listContacts = async (req, res, next) => {
   try {
@@ -29,6 +30,13 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   const { body } = req;
+
+  const { error } = addContactSchema.validate(body);
+
+  if (error) {
+    res.status(HTTP_STATUS.BAD_REQUEST).json({ message: error.message });
+  }
+
   try {
     const result = await Contact.create(body);
     res.status(HTTP_STATUS.CREATED).json(result);
@@ -41,6 +49,10 @@ const addContact = async (req, res, next) => {
 const updateContactById = async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
+  const { error } = updateContactSchema.validate(body);
+  if (error) {
+    res.status(HTTP_STATUS.BAD_REQUEST).json({ message: error.message });
+  }
   try {
     const result = await Contact.findByIdAndUpdate(contactId, body, { new: true });
     res.status(HTTP_STATUS.SUCCESS).json(result);
