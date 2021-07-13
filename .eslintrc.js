@@ -12,5 +12,6 @@ module.exports = {
     'comma-dangle': 'off',
     'space-before-function-paren': 'off',
     semi: 'off',
+    'no-prototype-builtins': 'off',
   },
 };
