@@ -1,4 +1,4 @@
-const addContactSchema = require('./addContact');
-const updateContactSchema = require('./updateContact');
+const addContactValidator = require('./addContact');
+const updateContactValidator = require('./updateContact');
 
-module.exports = { addContactSchema, updateContactSchema };
+module.exports = { addContactValidator, updateContactValidator };

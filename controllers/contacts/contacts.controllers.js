@@ -1,13 +1,17 @@
-const Contact = require('../../model/contact.model');
+const { contact: service } = require('../../services');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
-const { addContactSchema, updateContactSchema } = require('../../utils/validate/schemas');
 
-const listContacts = async (req, res, next) => {
+const listContacts = async (_, res, next) => {
   try {
-    const result = await Contact.find();
-    res.status(HTTP_STATUS.SUCCESS).json(result);
+    const result = await service.listContacts();
+    res.status(HTTP_STATUS.SUCCESS).json({
+      status: 'Success',
+      code: HTTP_STATUS.SUCCESS,
+      data: {
+        result,
+      },
+    });
   } catch (error) {
-    error.message = 'Error: cannot read contacts file';
     next(error);
   }
 };
@@ -16,13 +20,19 @@ const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
-    const result = await Contact.findById(contactId);
+    const result = await service.getContactById(contactId);
 
     if (!result) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'id not found' });
     }
 
-    res.status(HTTP_STATUS.SUCCESS).json(result);
+    res.status(HTTP_STATUS.SUCCESS).json({
+      status: 'Success',
+      code: HTTP_STATUS.SUCCESS,
+      data: {
+        result,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -30,18 +40,25 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   const { body } = req;
-
-  const { error } = addContactSchema.validate(body);
-
-  if (error) {
-    res.status(HTTP_STATUS.BAD_REQUEST).json({ message: error.message });
-  }
-
   try {
-    const result = await Contact.create(body);
-    res.status(HTTP_STATUS.CREATED).json(result);
+    const result = await service.addContact(body);
+
+    if (!result) {
+      req.status(HTTP_STATUS.BAD_REQUEST).json({
+        status: 'Error',
+        code: HTTP_STATUS.BAD_REQUEST,
+        message: 'Bad request',
+      });
+    }
+
+    res.status(HTTP_STATUS.CREATED).json({
+      status: 'Success',
+      code: HTTP_STATUS.CREATED,
+      data: {
+        result,
+      },
+    });
   } catch (error) {
-    error.code = HTTP_STATUS.BAD_REQUEST;
     next(error);
   }
 };
@@ -49,13 +66,23 @@ const addContact = async (req, res, next) => {
 const updateContactById = async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
-  const { error } = updateContactSchema.validate(body);
-  if (error) {
-    res.status(HTTP_STATUS.BAD_REQUEST).json({ message: error.message });
-  }
+
   try {
-    const result = await Contact.findByIdAndUpdate(contactId, body, { new: true });
-    res.status(HTTP_STATUS.SUCCESS).json(result);
+    const result = await service.updateContactById(contactId, body);
+    if (!result) {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: 'Error',
+        code: HTTP_STATUS.NOT_FOUND,
+        message: 'Not found',
+      });
+    }
+    res.status(HTTP_STATUS.SUCCESS).json({
+      status: 'Success',
+      code: HTTP_STATUS.SUCCESS,
+      data: {
+        result,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -64,8 +91,16 @@ const updateContactById = async (req, res, next) => {
 const deleteContactById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    await Contact.findByIdAndDelete(contactId);
-    res.status(HTTP_STATUS.DELETED).json({ id: contactId });
+    const result = await service.deleteContactById(contactId);
+
+    if (!result) {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: 'Error',
+        code: HTTP_STATUS.NOT_FOUND,
+        message: 'Not found',
+      });
+    }
+    res.status(HTTP_STATUS.SUCCESS).json({ id: contactId });
   } catch (error) {
     next(error);
   }
@@ -80,8 +115,23 @@ const updateStatusContact = async (req, res, next) => {
   }
 
   try {
-    const result = await Contact.findByIdAndUpdate(contactId, body, { new: true });
-    res.status(HTTP_STATUS.SUCCESS).json(result);
+    const result = await service.updateContactById(contactId, body);
+
+    if (!result) {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: 'Error',
+        code: HTTP_STATUS.NOT_FOUND,
+        message: 'Not found',
+      });
+    }
+
+    res.status(HTTP_STATUS.SUCCESS).json({
+      status: 'Success',
+      code: HTTP_STATUS.SUCCESS,
+      data: {
+        result,
+      },
+    });
   } catch (error) {
     next(error);
   }
