@@ -1,7 +1,7 @@
 const { Contact } = require('../models');
 
-const listContacts = () => {
-  const result = Contact.find();
+const listContacts = filter => {
+  const result = Contact.find(filter);
   return result;
 };
 

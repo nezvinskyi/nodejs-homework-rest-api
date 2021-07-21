@@ -3,6 +3,7 @@ const getCurrentUser = (req, res, next) => {
     status: 'Success',
     code: 200,
     data: {
+      id: req.user._id,
       email: req.user.email,
       subscription: req.user.subscription,
     },

@@ -2,9 +2,14 @@ const { contact: service } = require('../../services');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
 const listContacts = async (req, res, next) => {
-  console.log('req.user :>> ', req.user);
+  const query = req.query;
+  const filter = {
+    owner: req.user._id,
+    ...query,
+  };
+  console.log('filter :>> ', filter);
   try {
-    const result = await service.listContacts();
+    const result = await service.listContacts(filter);
     res.status(HTTP_STATUS.SUCCESS).json({
       status: 'Success',
       code: HTTP_STATUS.SUCCESS,

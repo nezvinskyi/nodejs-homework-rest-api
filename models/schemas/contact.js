@@ -20,6 +20,7 @@ const contactSchema = Schema(
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
+      required: true,
     },
   },
   { timestamps: true },
