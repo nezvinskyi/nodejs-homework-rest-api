@@ -2,10 +2,9 @@ const { contact: service } = require('../../services');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
 const listContacts = async (req, res, next) => {
-  const query = req.query;
   const filter = {
     owner: req.user._id,
-    ...query,
+    ...req.query,
   };
   console.log('filter :>> ', filter);
   try {
