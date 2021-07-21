@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 const { Router } = require('express');
 const router = Router();
-// const jwt = require('jsonwebtoken');
+
 // const passport = require('passport');
 
 const validateMiddleware = require('../middleware/validateMiddleware');
@@ -26,5 +26,6 @@ const { users: ctrl } = require('../controllers/');
 // };
 
 router.post('/signup', validateMiddleware(registrationValidator), ctrl.signup);
+router.post('/login', validateMiddleware(registrationValidator), ctrl.login);
 
 module.exports = router;
