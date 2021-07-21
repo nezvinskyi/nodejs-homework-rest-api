@@ -1,7 +1,6 @@
 const { Contact } = require('../models');
 
 const listContacts = () => {
-  console.log('from services');
   const result = Contact.find();
   return result;
 };
