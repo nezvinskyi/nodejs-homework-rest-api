@@ -14,4 +14,9 @@ const updateById = (id, updateData) => {
   return User.findByIdAndUpdate(id, updateData);
 };
 
-module.exports = { getById, getOne, addUser, updateById };
+module.exports = {
+  getById,
+  getOne,
+  addUser,
+  updateById,
+};

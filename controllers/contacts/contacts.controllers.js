@@ -1,7 +1,8 @@
 const { contact: service } = require('../../services');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
-const listContacts = async (_, res, next) => {
+const listContacts = async (req, res, next) => {
+  console.log('req.user :>> ', req.user);
   try {
     const result = await service.listContacts();
     res.status(HTTP_STATUS.SUCCESS).json({

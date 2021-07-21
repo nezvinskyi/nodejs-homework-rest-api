@@ -1,4 +1,4 @@
-const validateMiddleware = validator => {
+const validate = validator => {
   return async (req, res, next) => {
     const error = await validator(req.body);
 
@@ -14,4 +14,4 @@ const validateMiddleware = validator => {
   };
 };
 
-module.exports = validateMiddleware;
+module.exports = validate;

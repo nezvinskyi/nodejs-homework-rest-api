@@ -2,30 +2,14 @@
 const { Router } = require('express');
 const router = Router();
 
-// const passport = require('passport');
-
-const validateMiddleware = require('../middleware/validateMiddleware');
+const { validate, authenticate } = require('../middleware/');
 const { registrationValidator } = require('../utils/validate/schemas');
 
 const { users: ctrl } = require('../controllers/');
 
-// const auth = (req, res, next) => {
-//   passport.authenticate('jwt', { session: false }, (err, user) => {
-//     if (!user || err) {
-//       return res.status(401).json({
-//         status: 'Error',
-//         code: 401,
-//         message: 'Unauthorized',
-//         data: 'Unauthorized',
-//       });
-//     }
+router.post('/signup', validate(registrationValidator), ctrl.signup);
+router.post('/login', validate(registrationValidator), ctrl.login);
 
-//     req.user = user;
-//     next();
-//   })(req, res, next);
-// };
-
-router.post('/signup', validateMiddleware(registrationValidator), ctrl.signup);
-router.post('/login', validateMiddleware(registrationValidator), ctrl.login);
+router.get('/logout', authenticate, ctrl.logout);
 
 module.exports = router;
