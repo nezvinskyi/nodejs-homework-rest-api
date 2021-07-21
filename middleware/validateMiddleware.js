@@ -1,6 +1,6 @@
 const validateMiddleware = validator => {
-  return (req, res, next) => {
-    const error = validator(req.body);
+  return async (req, res, next) => {
+    const error = await validator(req.body);
 
     if (error) {
       res.status(400).json({
@@ -8,6 +8,7 @@ const validateMiddleware = validator => {
         code: 400,
         message: error.message,
       });
+      return;
     }
     next();
   };
