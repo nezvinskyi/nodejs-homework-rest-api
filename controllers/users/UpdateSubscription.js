@@ -1,4 +1,5 @@
 const { user: service } = require('../../services');
+const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
 const updateSubscription = async (req, res, next) => {
   const {
@@ -8,9 +9,9 @@ const updateSubscription = async (req, res, next) => {
   try {
     const updatedUser = await service.updateById(id, body);
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.SUCCESS).json({
       status: 'Success',
-      code: 200,
+      code: HTTP_STATUS.SUCCESS,
       data: {
         updatedUser,
       },

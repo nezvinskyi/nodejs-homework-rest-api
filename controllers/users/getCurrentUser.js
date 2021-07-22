@@ -1,7 +1,9 @@
+const HTTP_STATUS = require('../../utils/httpStatusCodes');
+
 const getCurrentUser = (req, res, next) => {
-  res.status(200).json({
+  res.status(HTTP_STATUS.SUCCESS).json({
     status: 'Success',
-    code: 200,
+    code: HTTP_STATUS.SUCCESS,
     data: {
       id: req.user._id,
       email: req.user.email,

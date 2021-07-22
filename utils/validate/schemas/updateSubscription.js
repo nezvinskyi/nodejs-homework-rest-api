@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const updateUser = updatedData => {
+const updateSubscription = updatedData => {
   const schema = Joi.object({
     subscription: Joi.string().valid('starter', 'pro', 'business'),
   });
@@ -8,4 +8,4 @@ const updateUser = updatedData => {
   return error;
 };
 
-module.exports = updateUser;
+module.exports = updateSubscription;

@@ -1,11 +1,12 @@
 const passport = require('passport');
+const HTTP_STATUS = require('../utils/httpStatusCodes');
 
 const authenticate = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (error, user) => {
     if (error || !user || !user.token) {
-      res.status(401).json({
+      res.status(HTTP_STATUS.UNAUTHORIZED).json({
         status: 'Error',
-        code: 401,
+        code: HTTP_STATUS.UNAUTHORIZED,
         message: 'Not authorized',
       });
       return;

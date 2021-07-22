@@ -1,4 +1,5 @@
 const { user: service } = require('../../services');
+const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -6,18 +7,18 @@ const signup = async (req, res, next) => {
     const user = await service.getOne({ email });
 
     if (user) {
-      return res.status(409).json({
+      return res.status(HTTP_STATUS.CONFLICT).json({
         status: 'Error',
-        code: 409,
+        code: HTTP_STATUS.CONFLICT,
         message: 'Email is already in use',
         data: 'Conflict',
       });
     }
     const newUser = await service.addUser({ email, password });
     const { subscription } = newUser;
-    res.status(201).json({
+    res.status(HTTP_STATUS.CREATED).json({
       status: 'Success',
-      code: 201,
+      code: HTTP_STATUS.CREATED,
       data: {
         user: { email, subscription },
       },

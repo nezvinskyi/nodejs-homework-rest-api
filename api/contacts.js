@@ -1,15 +1,10 @@
-/* eslint-disable indent */
 const { Router } = require('express');
 const router = Router();
-const { contacts: ctrl } = require('../controllers/contacts');
+const { contacts: ctrl } = require('../controllers/');
 
 const { validate, authenticate } = require('../middleware');
 
-const {
-  addContactValidator,
-  updateContactValidator,
-  updateUser,
-} = require('../utils/validate/schemas');
+const { addContactValidator, updateContactValidator } = require('../utils/validate/schemas');
 
 router.get('/', authenticate, ctrl.listContacts);
 
@@ -21,6 +16,6 @@ router.put('/:contactId', validate(updateContactValidator), authenticate, ctrl.u
 
 router.delete('/:contactId', authenticate, ctrl.deleteContactById);
 
-router.patch('/:contactId/favorite', validate(updateUser), authenticate, ctrl.updateStatusContact);
+router.patch('/:contactId/favorite', authenticate, ctrl.toggleFavoriteContact);
 
 module.exports = router;
