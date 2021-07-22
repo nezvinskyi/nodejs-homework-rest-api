@@ -11,7 +11,7 @@ const addUser = ({ email, password }) => {
 };
 
 const updateById = (id, updateData) => {
-  return User.findByIdAndUpdate(id, updateData);
+  return User.findByIdAndUpdate(id, updateData, { new: true });
 };
 
 module.exports = {

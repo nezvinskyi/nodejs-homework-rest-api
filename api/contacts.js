@@ -5,7 +5,11 @@ const { contacts: ctrl } = require('../controllers/contacts');
 
 const { validate, authenticate } = require('../middleware');
 
-const { addContactValidator, updateContactValidator } = require('../utils/validate/schemas');
+const {
+  addContactValidator,
+  updateContactValidator,
+  updateUser,
+} = require('../utils/validate/schemas');
 
 router.get('/', authenticate, ctrl.listContacts);
 
@@ -17,6 +21,6 @@ router.put('/:contactId', validate(updateContactValidator), authenticate, ctrl.u
 
 router.delete('/:contactId', authenticate, ctrl.deleteContactById);
 
-router.patch('/:contactId/favorite', authenticate, ctrl.updateStatusContact);
+router.patch('/:contactId/favorite', validate(updateUser), authenticate, ctrl.updateStatusContact);
 
 module.exports = router;

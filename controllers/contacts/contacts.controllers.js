@@ -6,7 +6,6 @@ const listContacts = async (req, res, next) => {
     owner: req.user._id,
     ...req.query,
   };
-  console.log('filter :>> ', filter);
   try {
     const result = await service.listContacts(filter);
     res.status(HTTP_STATUS.SUCCESS).json({
