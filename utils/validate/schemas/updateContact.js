@@ -5,6 +5,7 @@ const updateContactSchema = updatedContact => {
     name: Joi.string().min(2),
     email: Joi.string().email({ minDomainSegments: 2 }),
     phone: Joi.string(),
+    owner: Joi.string(),
     favorite: Joi.boolean(),
   }).min(1);
 

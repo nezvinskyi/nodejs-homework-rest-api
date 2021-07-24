@@ -1,8 +1,12 @@
 const { Contact } = require('../models');
 
-const listContacts = () => {
-  console.log('from services');
-  const result = Contact.find();
+const listContacts = (filter, options) => {
+  const result = Contact.paginate(filter, options, function (_, result) {
+    return {
+      result: result.docs,
+      total: result.totalDocs,
+    };
+  });
   return result;
 };
 
