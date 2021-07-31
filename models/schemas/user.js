@@ -1,5 +1,7 @@
 const { Schema } = require('mongoose');
 const bcryptjs = require('bcryptjs');
+const gravatar = require('gravatar');
+
 const userSchema = Schema(
   {
     password: {
@@ -33,6 +35,10 @@ userSchema.methods.setPassword = function (password) {
 
 userSchema.methods.validatePassword = function (password) {
   return bcryptjs.compareSync(password, this.password);
+};
+
+userSchema.methods.generateAvatar = function (email) {
+  this.avatarURL = gravatar.url(email, { protocol: 'https' });
 };
 
 module.exports = userSchema;
