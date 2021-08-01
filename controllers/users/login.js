@@ -10,7 +10,7 @@ const login = async (req, res, next) => {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         status: 'Error',
         code: HTTP_STATUS.UNAUTHORIZED,
-        message: 'Email or password is wron',
+        message: 'Email or password is wrong',
       });
     }
     const { SECRET } = process.env;

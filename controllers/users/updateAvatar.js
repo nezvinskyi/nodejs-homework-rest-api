@@ -5,6 +5,13 @@ const imageNormalize = require('../../utils/imageNormalize');
 
 const updateAvatar = async (req, res, next) => {
   const userId = req.user._id.toString();
+  if (!req.file) {
+    return res.status(400).json({
+      status: 'Error',
+      code: 400,
+      error: 'no file attached',
+    });
+  }
   const { path: tempFileName } = req.file;
   const uploadDir = path.join(process.cwd(), 'public/avatars');
 
