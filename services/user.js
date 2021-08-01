@@ -7,7 +7,6 @@ const getOne = filter => User.findOne(filter);
 const addUser = async ({ email, password }) => {
   const newUser = await new User({ email });
   newUser.setPassword(password);
-  newUser.generateAvatar(email);
   return newUser.save();
 };
 

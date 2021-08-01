@@ -24,6 +24,9 @@ const userSchema = Schema(
     },
     avatarURL: {
       type: String,
+      default: function () {
+        return gravatar.url(this.email, { protocol: 'https' });
+      },
     },
   },
   { timestamps: true },
@@ -35,10 +38,6 @@ userSchema.methods.setPassword = function (password) {
 
 userSchema.methods.validatePassword = function (password) {
   return bcryptjs.compareSync(password, this.password);
-};
-
-userSchema.methods.generateAvatar = function (email) {
-  this.avatarURL = gravatar.url(email, { protocol: 'https' });
 };
 
 module.exports = userSchema;
