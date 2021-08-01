@@ -6,6 +6,10 @@ const { validate, authenticate } = require('../middleware');
 
 const { addContactValidator, updateContactValidator } = require('../utils/validate/schemas');
 
+/*
+ * pagination
+ * http://localhost:1234/api/v1/contacts?page=1&limit=20
+ */
 router.get('/', authenticate, ctrl.listContacts);
 
 router.get('/:contactId', authenticate, ctrl.getContactById);
