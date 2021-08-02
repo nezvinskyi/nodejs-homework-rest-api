@@ -19,7 +19,9 @@ const updateAvatar = async (req, res, next) => {
     const fileName = path.join(uploadDir, `${userId}.jpg`);
     await imageNormalize(tempFileName);
 
-    const result = await service.updateById(userId, { avatarURL: fileName });
+    const result = await service.updateById(userId, {
+      avatarURL: `http://localhost:1234/avatars/${userId}.jpg`,
+    });
     await fs.rename(tempFileName, fileName);
 
     res.status(200).json({
