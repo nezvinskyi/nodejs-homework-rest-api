@@ -5,7 +5,10 @@ const imageNormalize = imagePath => {
     if (err) {
       throw err;
     }
-    convertedImage.resize(250, 250).quality(60).greyscale().write(`${imagePath}`);
+    convertedImage
+      .autocrop()
+      .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE)
+      .write(`${imagePath}`);
   });
 };
 
