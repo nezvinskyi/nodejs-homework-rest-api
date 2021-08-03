@@ -7,7 +7,7 @@ const login = async (req, res, next) => {
   try {
     const user = await service.getOne({ email });
     if (!user || !user.validatePassword(password)) {
-      res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         status: 'Error',
         code: HTTP_STATUS.UNAUTHORIZED,
         message: 'Email or password is wrong',
