@@ -14,7 +14,7 @@ const verify = async (req, res, next) => {
       });
     }
 
-    await service.updateById(user._id, { verified: true, verifyCode: '' });
+    await service.updateById(user._id, { verified: true, verifyCode: null });
     // res.status(HTTP_STATUS.SUCCESS).json({
     //   status: 'Success',
     //   code: HTTP_STATUS.SUCCESS,

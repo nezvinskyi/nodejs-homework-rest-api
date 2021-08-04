@@ -25,7 +25,7 @@ const signup = async (req, res, next) => {
       to: email,
       subject: 'Please confirm your email',
       text: `Please click the following link to confirm your email and finish the registration: 
-			http://localhost:1234/api/v1/users/verify/${verifyCode}`,
+http://localhost:1234/api/v1/users/verify/${verifyCode}`,
     };
     await sendMail(mail);
 
