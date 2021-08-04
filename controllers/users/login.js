@@ -13,6 +13,14 @@ const login = async (req, res, next) => {
         message: 'Email or password is wrong',
       });
     }
+    if (!user.verified) {
+      return res.status(HTTP_STATUS.CONFLICT).json({
+        status: 'Error',
+        code: HTTP_STATUS.CONFLICT,
+        message: 'User email is not verified. Please check your email',
+      });
+    }
+
     const { SECRET } = process.env;
     const payload = {
       id: user._id,
