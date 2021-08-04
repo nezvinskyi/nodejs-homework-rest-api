@@ -1,5 +1,7 @@
+const { nanoid } = require('nanoid');
 const { user: service } = require('../../services');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
+const sendMail = require('../../utils/sendMail');
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -14,8 +16,19 @@ const signup = async (req, res, next) => {
         data: 'Conflict',
       });
     }
-    const newUser = await service.addUser({ email, password });
+    const verifyCode = await nanoid();
+    const newUser = await service.addUser({ password, email, verifyCode });
+
     const { _id, subscription, avatarURL } = newUser;
+
+    const mail = {
+      to: email,
+      subject: 'Please confirm your email',
+      text: `PLease click the following link to confirm your email and finish the registration: 
+			http://localhost:1234/api/v1/users/verify/${verifyCode}`,
+    };
+    await sendMail(mail);
+
     res.status(HTTP_STATUS.CREATED).json({
       status: 'Success',
       code: HTTP_STATUS.CREATED,
